@@ -5,12 +5,16 @@ from sqlalchemy import create_engine
 app=Flask(__name__)
 
 #connect to database
-engine = create_engine('sqlite:///db.sqlite')
+engine = create_engine('sqlite:///data/db.sqlite')
+
+@app.route('/data')
+def data():
+    return jsonify(['a','b','c'])
 
 #define routes
 @app.route('/')
 def index():
-    return render_template('heatmap.html')
+    return render_template('index_pie.html')
 
 @app.route('/heatmap')
 def heatmap():
