@@ -1,26 +1,59 @@
-d3.json('/data').then((data)=>console.log(data));
+var chart=null;
 
-anychart.onDocumentReady(function() {
+d3.json('/heatmap').then(function(heatmap){
 
-//set the data
-var data = [
-    {x: "manufacturing", value: 16.5},
-    {x: "agriculture", value: 14674252},
-    {x: "industry", value: 30.7},
-    {x: "services", value: 53.3},
-];
+    console.log(heatmap);
 
-// create the chart
-var chart = anychart.pie();
+    var selector=d3.select('#selector');
+    var countries=Object.keys(heatmap);
+    for (let i=0; i<countries.length; i++){
+        selector.append('option')
+                .text(countries[i])
+                .property('value', countries[i])
+    };
+    // console.log(countries);
+    function plotCountry(countryName){
+        console.log(countryName);
+        //set the data
+        let currentCountryName=countryName
+        let currentCountry=heatmap[currentCountryName];
+        console.log(currentCountry);
 
-// set the chart title
-chart.title("Ecuador's GDP Contributions");
+        var data = [
+            {x: "manufacturing", value: parseFloat(currentCountry['manufacturing'])},
+            {x: "agriculture", value: parseFloat(currentCountry['agriculture'])},
+            {x: "industry", value: parseFloat(currentCountry['industry'])},
+            {x: "services", value: parseFloat(currentCountry['services'])},
+        ];
 
-// add the data
-chart.data(data);
+        anychart.onDocumentReady(function() {
+            if (chart!=null){
+                // chart.clear();
+                // chart.config.data = data;
+                chart.data(data);
+                chart.title(`${currentCountryName}'s GDP Contributions`);
+                // chart.update();
+            } else {
+                // create the chart
+                chart = anychart.pie();
 
-// display the chart in the container
-chart.container('container');
-chart.draw();
+                // set the chart title
+                chart.title(`${currentCountryName}'s GDP Contributions`);
 
-});
+                // add the data
+                chart.data(data);
+
+                // display the chart in the container
+                chart.container('container_angel');
+                chart.draw();
+            };
+        });
+    }
+
+    plotCountry('Afghanistan');
+
+    selector.on('change', function(){
+        let countrySelected=selector.property('value')
+        plotCountry(countrySelected);
+    });
+})
