@@ -1,0 +1,116 @@
+<!DOCTYPE HTML>
+<html>
+<head>  
+<script>
+window.onload = function () {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+	animationEnabled: true,
+	title:{
+		text: "Pollution by Country"
+	},	
+	axisY: {
+		title: "Air Quality Rating",
+		titleFontColor: "#002147",
+		lineColor: "#00ced1",
+		labelFontColor: "#002147",
+		tickColor: "#008b8b"
+	},
+	axisY2: {
+		title: "Water Pollution Rating",
+		titleFontColor: "#00b7eb",
+		lineColor: "#000036",
+		labelFontColor: "#000036",
+		tickColor: "#000036"
+	},	
+	toolTip: {
+		shared: true
+	},
+	legend: {
+		cursor:"pointer" ,
+		itemclick: toggleDataSeries
+	},
+	data: [{
+		type: "column",
+		name: "Rating",
+		legendText: "Air Q",
+		legendMarkerColor: "#483d8b",
+		showInLegend: true, 
+      	indexLabelPlacement: "outside",  
+        indexLabelOrientation: "vertical",
+		dataPoints:[
+			{ label: "United States", y: 82.03, color:"#483d8b"},
+			{ label: "India", y: 40.2, color:"#483d8b"},
+			{ label: "Japan", y: 74.39, color:"#483d8b"},
+			{ label: "Indonesia", y: 67.7, color:"#483d8b" },
+			{ label: "Brazil", y: 62, color:"#483d8b" },
+			{ label: "Pakistan", y: 45, color:"#483d8b" },
+			{ label: "Mexico", y: 62, color:"#483d8b"},
+			{ label: "Philippines", y: 39, color:"#483d8b" },
+			{ label: "Germany", y: 83, indexLabel: "Highest Air Quality" , color:"#483d8b"}, 
+			{ label: "Nigeria", y: 16, color:"#483d8b" },
+			{ label: "Canada", y: 82, color:"#483d8b" },
+			{ label: "Argentina", y: 64, color:"#483d8b" },
+			{ label: "Thailand", y: 43.3, color:"#483d8b"},
+			{ label: "Spain", y: 80, color:"#483d8b"},
+			{ label: "Bangladesh", y: 33, color:"#483d8b" },
+			{ label: "Australia", y: 80, color:"#483d8b" },
+			{ label: "Malaysia", y: 52, color:"#483d8b" },
+			{ label: "France", y: 71, color:"#483d8b" },
+			{ label: "Saudi Arabia", y: 31.6, color:"#483d8b" },
+			{ label: "Peru", y: 42, color:"#483d8b" }
+		]
+	},
+	{
+		type: "column",	
+		name: "Rating",
+		legendText: "Water Pollution",
+		legendMarkerColor: "#9bddff",
+		axisYType: "secondary",
+      	indexLabelPlacement: "outside",  
+        indexLabelOrientation: "vertical",
+		showInLegend: true,
+		dataPoints:[
+				{ label: "United States",y: 39, color: "#9bddff"},
+			{ label: "India", y: 63.4, color: "#9bddff"},
+			{ label: "Japan", y: 32.7, color: "#9bddff" },
+			{ label: "Indonesia", y: 30, color: "#9bddff" },
+			{ label: "Brazil", y: 53.6 , color: "#9bddff"},
+			{ label: "Pakistan", y: 65, color: "#9bddff" },
+			{ label: "Mexico", y: 48, color: "#9bddff"},
+			{ label: "Philippines", y: 70.54, color: "#9bddff" },
+			{ label: "Germany", y: 33 , color: "#9bddff"},
+			{ label: "Nigeria", y: 82.69 ,indexLabel: "Highest Water Pollution", color: "#9bddff" }, 
+			{ label: "Canada", y: 30 , color: "#9bddff"},
+			{ label: "Argentina", y: 56 , color: "#9bddff"},
+			{ label: "Thailand", y: 53, color: "#9bddff"},
+			{ label: "Spain", y: 33, color: "#9bddff"},
+			{ label: "Bangladesh", y: 52, color: "#9bddff" },
+			{ label: "Australia", y: 33 , color: "#9bddff"},
+			{ label: "Malaysia", y: 60.74 , color: "#9bddff"},
+			{ label: "France", y: 34, color: "#9bddff" },
+			{ label: "Saudi Arabia", y: 49.4 , color: "#9bddff"},
+			{ label: "Peru", y: 60.5, color: "#9bddff" }
+		]
+	}]
+});
+chart.render();
+
+function toggleDataSeries(e) {
+	if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+		e.dataSeries.visible = false;
+	}
+	else {
+		e.dataSeries.visible = true;
+	}
+	chart.render();
+}
+
+}
+</script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
