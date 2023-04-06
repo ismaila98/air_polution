@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My Heatmap Page</title>
+  <meta charset="utf-8" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v2.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+  <style>
+    #map {
+      height: 800px;
+      width: 100%;
+    }
+
+    .tooltip {
+        position: absolute;
+        z-index: 9999;
+        background-color: white;
+        border: 1px solid black;
+        padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Heatmap of Water Pollution and Proportion of Population</h1>
+  <div id="map"></div>
+  <div class="tooltip"></div>
+  <script>
+    Promise.all([
+      d3.csv("https://raw.githubusercontent.com/bnpw49/Project_03/main/Project_03/air_polution/data/my_data.csv"),
+      d3.json("https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json")
+    ]).then(function (data) {
+      const csvData = data[0];
+      const geoData = data[1];
+
+      const width = 960;
+      const height = 600;
+
+      const svg = d3.select("#map")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .call(d3.zoom().on("zoom", function () {
+          svg.attr("transform", d3.event.transform)
+        }))
+        .append("g");
+
+      const projection = d3.geoMercator()
+        .fitSize([width, height], geoData);
+
+      const path = d3.geoPath()
+        .projection(projection);
+
+      const colorScale = d3.scaleSequential()
+        .interpolator(d3.interpolateYlOrRd)
+        .domain(d3.extent(csvData, d => +d["WaterPollution"]));
+
+      const legend = d3.legendColor()
+        .scale(colorScale)
+        .title("Water Pollution");
+
+      svg.append("g")
+        .attr("transform", "translate(20, 20)")
+        .call(legend);
+
+      const opacityScale = d3.scaleLinear()
+        .domain(d3.extent(csvData, d => +d["proportion of population"]))
+        .range([0.1, 1]);
+
+      const tooltip = d3.select(".tooltip");
+
+      svg.append("g")
+        .attr("class", "countries")
+        .selectAll("path")
+        .data(geoData.features)
+        .enter().append("path")
+        .attr("d", path)
+        .style("fill", function (d) {
+          const countryData = csvData.find(c => c.Country === d.properties.name);
+          if (countryData) {
+            return colorScale(+countryData["WaterPollution"]);
+          }
+          return "grey";
+        })
+        .style("opacity", function (d) {
+          const countryData = csvData.find(c => c.Country === d.properties.name);
+          if (countryData) {
+            return opacityScale(+countryData["proportion of population"]);
+          }
+          return 0.1;
+        })
+        .on("mouseover", function (event, d) {
+            console.log("Mouseover event triggered");
+          d3.select(this).style("stroke", "black");
+          const countryData = csvData.find(c => c.Country === d.properties.name);
+          console.log("Country data:", countryData);
+          tooltip.html(`
+            <div><strong>Country: </strong>${d.properties.name}</div>
+            <div><strong>WaterPollution: </strong>${countryData["WaterPollution"]}</div>
+            <div><strong>Proportion of population: </strong>${countryData["proportion of population"]}</div>
+          `);
+          console.log("Tooltip HTML:", tooltip.html());
+          tooltip.style("visibility", "visible");
+        })
+        .on("mousemove", function (event) {
+            tooltip.style("top", event.pageY + 10 + "px");
+            tooltip.style("left", event.pageX + 10 + "px");
+        })
+        .on("mouseout", function (event, d) {
+            d3.select(this).style("stroke", null);
+            tooltip.style("visibility", "hidden");
+        });
+          // Create zoom behavior for the map
+        const zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", zoomed);
+
+        svg.call(zoom);
+
+        function zoomed(event) {
+            const { transform } = event;
+            svg.selectAll("path")
+            .attr("transform", transform);
+        }
+});
+</script>
+</body>
+</html>

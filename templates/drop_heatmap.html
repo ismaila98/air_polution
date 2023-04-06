@@ -1,0 +1,66 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Display Three HTML Files</title>
+  <style>
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <select id="fileSelect">
+      <option value="heatmap_mortality.html">Mortality Heatmap</option>
+      <option value="heatmap_AirQuality.html">Air Quality Heatmap</option>
+      <option value="heatmap_waterpollution.html">Water Pollution Heatmap</option>
+      </select>
+
+  <iframe id="fileDisplay" src="file1.html"></iframe>
+
+  <script>
+    var fileSelect = document.getElementById("fileSelect");
+    var fileDisplay = document.getElementById("fileDisplay");
+
+    fileSelect.addEventListener("change", function() {
+      fileDisplay.src = this.value;
+    });
+  </script>
+</body>
+</html>
+ -->
+
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>Display Three HTML Files</title>
+  <style>
+    iframe {
+      width: 250%;
+      height:650px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  
+  <select id="fileSelect">
+      <option value="heatmap_mortality.html">Mortality Heatmap</option>
+      <option value="heatmap_AirQuality.html">Air Quality Heatmap</option>
+      <option value="heatmap_waterpollution.html">Water Pollution Heatmap</option>
+      </select>
+
+  <iframe id="fileDisplay" src="heatmap_mortality.html"></iframe>
+
+  <script>
+    var fileSelect = document.getElementById("fileSelect");
+    var fileDisplay = document.getElementById("fileDisplay");
+
+    fileSelect.addEventListener("change", function() {
+      fileDisplay.src = this.value;
+    });
+  </script>
+</body>
+</html>
