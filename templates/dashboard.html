@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <title>Pollution Dashboard</title>
+  <style>
+   #chartContainer {
+    width: 80%;
+    height: 600px;
+    position: absolute;
+    top: 0;
+    left: 10%;
+   }
+   #container_angel {
+    width: 50%;
+    height: 400px;
+    position: absolute;
+    top: 0;
+    right: 10%;
+   }
+   #heatmap {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+   }
+   #container {
+    position: relative;
+    width: 100%;
+    height: 1200px;
+   }
+   #quadrant-1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 50%;
+   }
+   #quadrant-2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 50%;
+   }
+   #quadrant-3 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    transform: scaleY(-1);
+   }
+
+      h1 {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Pollution Dashboard</h1>
+    <div id="container" >
+      <div id="quadrant-1">
+        <div id="chartContainer" style="height: 500px;"></div>
+      </div>
+      <div id="quadrant-2">
+        <div id="container_angel"></div>
+      </div>
+        <div id="heatmap"></div>
+      </div>
+    </div>
+    <script>
+      window.onload = function () {
+    
+      var chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        theme: "light3",
+        title: {
+          text: "Most Populated Countries Pollution Report"
+        },
+        axisX: {
+          title: "Country"
+        },
+        axisY: {
+            title:"Population"
+        },
+        toolTip: {
+          shared: true
+        },
+        legend: {
+          cursor: "pointer",
+          itemclick: toggleDataSeries
+        },
+        data: [
+        {
+          type: "column",
+          name: "Population",
+          showInLegend: true,
+          indexLabelPlacement: "outside",  
+              indexLabelOrientation: "vertical",
+          yValueFormatString: "##########",
+          dataPoints: [
+            { label: "United States", y: 285708562,indexLabel: "Highest Population" },
+            { label: "India", y: 122301713},
+            { label: "Japan", y: 71969941},
+            { label: "Indonesia", y: 65382483 },
+            { label: "Brazil", y: 53160937 },
+            { label: "Pakistan", y: 43356493 },
+            { label: "Mexico", y: 40913409},
+            { label: "Philippines", y: 39697991 },
+            { label: "Germany", y: 26848757 },
+            { label: "Nigeria", y: 25908744 },
+            { label: "Canada", y: 25446055 },
+            { label: "Argentina", y: 21187284 },
+            { label: "Thailand", y: 20367658},
+            { label: "Spain", y: 19444510},
+            { label: "Bangladesh", y: 19013791 },
+            { label: "Australia", y: 18945046 },
+            { label: "Malaysia", y: 18814815 },
+            { label: "France", y: 17842948 },
+            { label: "Saudi Arabia", y: 13753205 },
+            { label: "Peru", y: 13731951 }
+          ]
+        }, 
+        {
+          type: "line",
+          name: "Air Quality Average",
+          showInLegend: true,
+          indexLabelPlacement: "outside",  
+              indexLabelOrientation: "vertical",
+          yValueFormatString: "###0",
+          dataPoints: [
+            { label: "United States", y: 82.03},
+            { label: "India", y: 40.2},
+            { label: "Japan", y: 74.39},
+            { label: "Indonesia", y: 67.7 },
+            { label: "Brazil", y: 62 },
+            { label: "Pakistan", y: 45 },
+            { label: "Mexico", y: 62},
+            { label: "Philippines", y: 39 },
+            { label: "Germany", y: 83, indexLabel: "Highest Air Quality" }, 
+            { label: "Nigeria", y: 16 },
+            { label: "Canada", y: 82 },
+            { label: "Argentina", y: 64 },
+            { label: "Thailand", y: 43.3},
+            { label: "Spain", y: 80},
+            { label: "Bangladesh", y: 33 },
+            { label: "Australia", y: 80 },
+            { label: "Malaysia", y: 52 },
+            { label: "France", y: 71 },
+            { label: "Saudi Arabia", y: 31.6 },
+            { label: "Peru", y: 42 }
+          ]
+        },
+        {
+          type: "area",
+          name: "Water Pollution Average",
+          showInLegend: true,
+          indexLabelPlacement: "outside",  
+              indexLabelOrientation: "vertical",
+          yValueFormatString: "###0",
+          dataPoints: [
+            { label: "United States",y: 39 },
+            { label: "India", y: 63.4},
+            { label: "Japan", y: 32.7 },
+            { label: "Indonesia", y: 30 },
+            { label: "Brazil", y: 53.6 },
+            { label: "Pakistan", y: 65 },
+            { label: "Mexico", y: 48},
+            { label: "Philippines", y: 70.54 },
+            { label: "Germany", y: 33 },
+            { label: "Nigeria", y: 82.69 ,indexLabel: "Highest Water Pollution" }, 
+            { label: "Canada", y: 30 },
+            { label: "Argentina", y: 56 },
+            { label: "Thailand", y: 53},
+            { label: "Spain", y: 33},
+            { label: "Bangladesh", y: 52 },
+            { label: "Australia", y: 33 },
+            { label: "Malaysia", y: 60.74 },
+            { label: "France", y: 34 },
+            { label: "Saudi Arabia", y: 49.4 },
+            { label: "Peru", y: 60.5 }
+          ]
+        }]
+      });
+      chart.render();
+      
+      function addSymbols(e) {
+        var suffixes = ["", "K", "M", "B"];
+        var order = Math.max(Math.floor(Math.log(Math.abs(e.value)) / Math.log(1000)), 0);
+      
+        if(order > suffixes.length - 1)                	
+          order = suffixes.length - 1;
+      
+        var suffix = suffixes[order];      
+        return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
+      }
+      
+      function toggleDataSeries(e) {
+        if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+          e.dataSeries.visible = false;
+        } else {
+          e.dataSeries.visible = true;
+        }
+        e.chart.render();
+      }
+      
+      }
+      </script>
+      <script src="https://d3js.org/d3.v7.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+      <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+      <script>
+          var chart=null;
+          d3.json('/heatmap').then(function(heatmap){
+
+              console.log(heatmap);
+
+              var selector=d3.select('#selector');
+              var countries=Object.keys(heatmap);
+              for (let i=0; i<countries.length; i++){
+                  selector.append('option')
+                          .text(countries[i])
+                          .property('value', countries[i])
+              };
+              // console.log(countries);
+              function plotCountry(countryName){
+                  console.log(countryName);
+                  //set the data
+                  let currentCountryName=countryName
+                  let currentCountry=heatmap[currentCountryName];
+                  console.log(currentCountry);
+
+                  var data = [
+                      {x: "manufacturing", value: parseFloat(currentCountry['manufacturing'])},
+                      {x: "agriculture", value: parseFloat(currentCountry['agriculture'])},
+                      {x: "industry", value: parseFloat(currentCountry['industry'])},
+                      {x: "services", value: parseFloat(currentCountry['services'])},
+                  ];
+
+                  anychart.onDocumentReady(function() {
+                      if (chart!=null){
+                          // chart.clear();
+                          // chart.config.data = data;
+                          chart.data(data);
+                          chart.title(`${currentCountryName}'s GDP Contributions`);
+                          // chart.update();
+                      } else {
+                          // create the chart
+                          chart = anychart.pie();
+
+                          // set the chart title
+                          chart.title(`${currentCountryName}'s GDP Contributions`);
+
+                          // add the data
+                          chart.data(data);
+
+                          // display the chart in the container
+                          chart.container('container_angel');
+                          chart.draw();
+                      };
+                  });
+              }
+
+              plotCountry('Afghanistan');
+
+              selector.on('change', function(){
+                  let countrySelected=selector.property('value')
+                  plotCountry(countrySelected);
+              });
+          });</script>
+    
+      <style>
+        #container_angel {
+          width: 70%;
+          height: 70%;
+          position: relative;
+          top: 0;
+          right: 0;
+        }
+        #selector {
+          position: relative;
+          top: 75%;
+          right: 15%;
+        }
+      </style>
+      <style>
+        iframe {
+          width: 250%;
+          height:650px;
+          border: none;
+        }
+      </style>
+
+  <body>
+    <div id="chartContainer" style="height: 500px; width: 100%;"></div>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <div id="container_angel"></div>
+    <select id="selector"></select>
+    <select id="fileSelect" style="font-size: 18px; padding: 10px;">
+      <option value="static/heatmap_mortality.html">Mortality Heatmap</option>
+      <option value="static/heatmap_AirQuality.html">Air Quality Heatmap</option>
+      <option value="static/heatmap_waterpollution.html">Water Pollution Heatmap</option>
+      </select>
+
+  <iframe id="fileDisplay" src="static/heatmap_mortality.html"></iframe>
+
+  <script>
+    var fileSelect = document.getElementById("fileSelect");
+    var fileDisplay = document.getElementById("fileDisplay");
+
+    fileSelect.addEventListener("change", function() {
+      fileDisplay.src = this.value;
+    });
+  </script>
+  </body>
+</html>

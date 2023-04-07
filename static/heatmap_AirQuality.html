@@ -55,7 +55,7 @@
 
       const colorScale = d3.scaleSequential()
         .interpolator(d3.interpolateYlOrRd)
-        .domain(d3.extent(csvData, d => +d["AirQuality"]));
+        .domain(d3.extent(csvData, d => +d["AirQuality"]).reverse());
 
       const legend = d3.legendColor()
         .scale(colorScale)

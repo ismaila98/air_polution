@@ -1,18 +1,30 @@
-<!DOCTYPE html>
-  <html>
-    <head>
-        <title>JavaScript Pie Chart</title>
-        <script src="https://d3js.org/d3.v7.min.js"></script>
-        <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
-        <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>    
-    </head>
 
-    <body>
-      <select id="selector">
-        <!-- <option value=''>label1</option>
-        <option value=''>label2</option> -->
-      </select>
-      <div id="container_angel" style="width: 50%; height: 100%; float: left"></div>
-      <script src="static/logic.js"></script>
-    </body>
-  </html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JavaScript Pie Chart</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+    <style>
+      #container_angel {
+        width: 70%;
+        height: 70%;
+        position: relative;
+        top: 0;
+        right: 0;
+      }
+      #selector {
+        position: relative;
+        top: 75%;
+        right: 15%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="container_angel"></div>
+    <select id="selector"></select>
+    <script src="static/logic.js"></script>
+  </body>
+</html>
